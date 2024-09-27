@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字块生产器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 500px;
+        }
+        h1 {
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 28px;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .preset-styles, .font-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .style-option, .font-option {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: opacity 0.3s;
+            flex: 1;
+            margin: 0 5px;
+        }
+        .style-option:hover, .font-option:hover {
+            opacity: 0.8;
+        }
+        #style1 { background-color: #D2B48C; color: #8B4513; }
+        #style2 { background-color: #A7D7C5; color: #74B49B; }
+        #style3 { background-color: #F9C6C9; color: #FF6B6B; }
+        .font-option { background-color: #6c5ce7; }
+        .font-option.active { background-color: #5641e5; }
+        .color-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        .color-input-group {
+            flex: 1;
+            margin-right: 15px;
+        }
+        .color-input-group:last-child {
+            margin-right: 0;
+        }
+        .color-input-group input[type="color"] {
+            width: 100%;
+            height: 40px;
+            padding: 0;
+            border: none;
+            border-radius: 8px;
+        }
+        .width-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        .width-input-group {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .width-input-group:last-child {
+            margin-right: 0;
+        }
+        .width-input-group input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .slider-group {
+            margin-bottom: 30px;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+            margin-top: 15px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: opacity 0.3s;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        #generate { background-color: #f44336; }
+        #download { background-color: #4CAF50; }
+        #imageContainer {
+            margin-top: 30px;
+            text-align: center;
+        }
+        #generatedImage {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>文字块生产器</h1>
+        <div class="input-group">
+            <label for="text">文字:</label>
+            <input type="text" id="text" value="要加油呀">
+        </div>
+        <div class="preset-styles">
+            <button class="style-option" id="style1">样式1</button>
+            <button class="style-option" id="style2">样式2</button>
+            <button class="style-option" id="style3">样式3</button>
+        </div>
+        <div class="color-inputs">
+            <div class="color-input-group">
+                <label for="textColor">文字颜色:</label>
+                <input type="color" id="textColor" value="#A7D7C5">
+            </div>
+            <div class="color-input-group">
+                <label for="bgColor">背景颜色:</label>
+                <input type="color" id="bgColor" value="#D2B48C">
+            </div>
+            <div class="color-input-group">
+                <label for="strokeColor">描边颜色:</label>
+                <input type="color" id="strokeColor" value="#FFFFFF">
+            </div>
+        </div>
+        <div class="width-inputs">
+            <div class="width-input-group">
+                <label for="width">矩形宽度:</label>
+                <input type="number" id="width" value="1800" min="300" max="2400">
+            </div>
+            <div class="width-input-group">
+                <label for="strokeWidth">描边宽度:</label>
+                <input type="number" id="strokeWidth" value="12" min="1" max="20">
+            </div>
+        </div>
+        <div class="slider-group">
+            <label for="cornerRadius">圆角半径: <span id="cornerRadiusValue">150</span>px</label>
+            <input type="range" id="cornerRadius" min="0" max="150" value="150">
+        </div>
+        <div class="font-options">
+            <button class="font-option active" id="regularFont">常规黑体</button>
+            <button class="font-option" id="cartoonFont">卡通体</button>
+        </div>
+        <div class="divider"></div>
+        <div class="button-group">
+            <button id="generate">生成图片</button>
+            <button id="download">下载图片</button>
+        </div>
+        <div id="imageContainer">
+            <img id="generatedImage" alt="生成的图片">
+        </div>
+    </div>
+    <script>
+        const textInput = document.getElementById('text');
+        const textColorInput = document.getElementById('textColor');
+        const bgColorInput = document.getElementById('bgColor');
+        const strokeColorInput = document.getElementById('strokeColor');
+        const strokeWidthInput = document.getElementById('strokeWidth');
+        const widthInput = document.getElementById('width');
+        const cornerRadiusInput = document.getElementById('cornerRadius');
+        const cornerRadiusValue = document.getElementById('cornerRadiusValue');
+        const generateButton = document.getElementById('generate');
+        const downloadButton = document.getElementById('download');
+        const generatedImage = document.getElementById('generatedImage');
+        const regularFontBtn = document.getElementById('regularFont');
+        const cartoonFontBtn = document.getElementById('cartoonFont');
+
+        function generateImage(text, textColor, bgColor, strokeColor, width, strokeWidth, cornerRadius, font) {
+            const scale = 4;
+            const canvas = document.createElement('canvas');
+            canvas.width = width * scale;
+            canvas.height = 300 * scale;
+            const ctx = canvas.getContext('2d');
+
+            ctx.scale(scale, scale);
+
+            // 绘制背景
+            ctx.fillStyle = bgColor;
+            ctx.beginPath();
+            if (cornerRadius <= 0) {
+                ctx.fillRect(0, 0, width, 300);
+            } else {
+                const radius = Math.min(cornerRadius, 150);
+                ctx.moveTo(radius, 0);
+                ctx.lineTo(width - radius, 0);
+                ctx.arcTo(width, 0, width, radius, radius);
+                ctx.lineTo(width, 300 - radius);
+                ctx.arcTo(width, 300, width - radius, 300, radius);
+                ctx.lineTo(radius, 300);
+                ctx.arcTo(0, 300, 0, 300 - radius, radius);
+                ctx.lineTo(0, radius);
+                ctx.arcTo(0, 0, radius, 0, radius);
+            }
+            ctx.closePath();
+            ctx.fill();
+
+            // 设置文字样式
+            ctx.font = `700 144px ${font}`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // 绘制描边
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = strokeWidth;
+            ctx.lineJoin = 'round';
+            ctx.miterLimit = 2;
+            ctx.strokeText(text, width / 2, 150);
+
+            // 绘制文字填充
+            ctx.fillStyle = textColor;
+            ctx.fillText(text, width / 2, 150);
+
+            generatedImage.src = canvas.toDataURL();
+        }
+
+        function updateImage() {
+            const text = textInput.value;
+            const textColor = textColorInput.value;
+            const bgColor = bgColorInput.value;
+            const strokeColor = strokeColorInput.value;
+            const width = parseInt(widthInput.value);
+            const strokeWidth = parseInt(strokeWidthInput.value);
+            const cornerRadius = parseInt(cornerRadiusInput.value);
+            const font = regularFontBtn.classList.contains('active') ? 'sans-serif' : '"ZCOOL KuaiLe", cursive';
+            generateImage(text, textColor, bgColor, strokeColor, width, strokeWidth, cornerRadius, font);
+        }
+
+        regularFontBtn.addEventListener('click', () => {
+            regularFontBtn.classList.add('active');
+            cartoonFontBtn.classList.remove('active');
+            updateImage();
+        });
+
+        cartoonFontBtn.addEventListener('click', () => {
+            cartoonFontBtn.classList.add('active');
+            regularFontBtn.classList.remove('active');
+            updateImage();
+        });
+
+        cornerRadiusInput.addEventListener('input', () => {
+            cornerRadiusValue.textContent = cornerRadiusInput.value;
+            updateImage();
+        });
+
+        generateButton.addEventListener('click', updateImage);
+
+        downloadButton.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = '文字块.png';
+            link.href = generatedImage.src;
+            link.click();
+        });
+
+        function applyStyle1() {
+            textInput.value = '要加油呀';
+            textColorInput.value = '#8B4513';
+            bgColorInput.value = '#D2B48C';
+            strokeColorInput.value = '#FFFFFF';
+            strokeWidthInput.value = '12';
+            cornerRadiusInput.value = '150';
+            cornerRadiusValue.textContent = '150';
+            regularFontBtn.classList.remove('active');
+            cartoonFontBtn.classList.add('active');
+            updateImage();
+        }
+
+        function applyStyle2() {
+            textInput.value = '要加油呀';
+            textColorInput.value = '#74B49B';
+            bgColorInput.value = '#A7D7C5';
+            strokeColorInput.value = '#FFFFFF';
+            strokeWidthInput.value = '12';
+            cornerRadiusInput.value = '150';
+            cornerRadiusValue.textContent = '150';
+            regularFontBtn.classList.remove('active');
+            cartoonFontBtn.classList.add('active');
+            updateImage();
+        }
+
+        function applyStyle3() {
+            textInput.value = '要加油呀';
+            textColorInput.value = '#FF6B6B';
+            bgColorInput.value = '#F9C6C9';
+            strokeColorInput.value = '#FFFFFF';
+            strokeWidthInput.value = '12';
+            cornerRadiusInput.value = '150';
+            cornerRadiusValue.textContent = '150';
+            regularFontBtn.classList.remove('active');
+            cartoonFontBtn.classList.add('active');
+            updateImage();
+        }
+
+        document.getElementById('style1').addEventListener('click', applyStyle1);
+        document.getElementById('style2').addEventListener('click', applyStyle2);
+        document.getElementById('style3').addEventListener('click', applyStyle3);
+
+        // 页面加载时应用样式1
+        window.addEventListener('load', () => {
+            applyStyle1();
+        });
+    </script>
+</body>
+</html>
