@@ -320,43 +320,35 @@
             link.click();
         });
 
-        function applyStyle1() {
-            textInput.value = '要加油呀';
-            textColorInput.value = '#8B4513';
-            bgColorInput.value = '#D2B48C';
-            strokeColorInput.value = '#FFFFFF';
-            strokeWidthInput.value = '12';
-            cornerRadiusInput.value = '150';
-            cornerRadiusValue.textContent = '150';
-            regularFontBtn.classList.remove('active');
-            cartoonFontBtn.classList.add('active');
+        function applyStyleWithoutTextChange(textColor, bgColor, strokeColor, strokeWidth, cornerRadius, font) {
+            textColorInput.value = textColor;
+            bgColorInput.value = bgColor;
+            strokeColorInput.value = strokeColor;
+            strokeWidthInput.value = strokeWidth;
+            cornerRadiusInput.value = cornerRadius;
+            cornerRadiusValue.textContent = cornerRadius;
+            
+            if (font === 'sans-serif') {
+                regularFontBtn.classList.add('active');
+                cartoonFontBtn.classList.remove('active');
+            } else {
+                regularFontBtn.classList.remove('active');
+                cartoonFontBtn.classList.add('active');
+            }
+            
             updateImage();
+        }
+
+        function applyStyle1() {
+            applyStyleWithoutTextChange('#8B4513', '#D2B48C', '#FFFFFF', '12', '150', '"ZCOOL KuaiLe", cursive');
         }
 
         function applyStyle2() {
-            textInput.value = '要加油呀';
-            textColorInput.value = '#74B49B';
-            bgColorInput.value = '#A7D7C5';
-            strokeColorInput.value = '#FFFFFF';
-            strokeWidthInput.value = '12';
-            cornerRadiusInput.value = '150';
-            cornerRadiusValue.textContent = '150';
-            regularFontBtn.classList.remove('active');
-            cartoonFontBtn.classList.add('active');
-            updateImage();
+            applyStyleWithoutTextChange('#74B49B', '#A7D7C5', '#FFFFFF', '12', '150', '"ZCOOL KuaiLe", cursive');
         }
 
         function applyStyle3() {
-            textInput.value = '要加油呀';
-            textColorInput.value = '#FF6B6B';
-            bgColorInput.value = '#F9C6C9';
-            strokeColorInput.value = '#FFFFFF';
-            strokeWidthInput.value = '12';
-            cornerRadiusInput.value = '150';
-            cornerRadiusValue.textContent = '150';
-            regularFontBtn.classList.remove('active');
-            cartoonFontBtn.classList.add('active');
-            updateImage();
+            applyStyleWithoutTextChange('#FF6B6B', '#F9C6C9', '#FFFFFF', '12', '150', '"ZCOOL KuaiLe", cursive');
         }
 
         document.getElementById('style1').addEventListener('click', applyStyle1);
@@ -365,6 +357,9 @@
 
         // 页面加载时应用样式1
         window.addEventListener('load', () => {
+            // 设置初始文本
+            textInput.value = "要加油呀";
+            // 应用样式1，但不改变文本
             applyStyle1();
         });
 
